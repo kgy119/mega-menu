@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#e65100">
+  <title>메가 커피 메뉴</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f0f0;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      background: #e65100;
+      color: white;
+      padding: 14px 16px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 11px 42px 11px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Noto Sans KR', sans-serif;
+      outline: none;
+      background: white;
+      color: #222;
+    }
+
+    #search-input::placeholder {
+      color: #aaa;
+    }
+
+    #clear-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 42px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #bbb;
+      font-size: 16px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #clear-btn:hover { color: #888; }
+
+    /* ── 자동완성 드롭다운 ── */
+    #autocomplete-list {
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 200;
+      display: none;
+    }
+
+    .ac-item {
+      padding: 11px 14px;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+    }
+
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover { background: #fff3e0; }
+
+    /* ── 카테고리 필터 ── */
+    .category-bar {
+      background: white;
+      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .category-bar::-webkit-scrollbar { display: none; }
+
+    .cat-chip {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+      background: white;
+      color: #666;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .cat-chip.active {
+      background: #e65100;
+      border-color: #e65100;
+      color: white;
+    }
+
+    /* ── 메인 콘텐츠 ── */
+    main {
+      padding: 14px 14px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .result-count {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+
+    /* ── 메뉴 카드 ── */
+    .menu-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.09);
+    }
+
+    .menu-name {
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .menu-name.hot  { color: #c62828; }
+    .menu-name.ice  { color: #1565c0; }
+    .menu-name.other { color: #2e7d32; }
+
+    .category-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin-bottom: 12px;
+    }
+
+    /* ── 제조순서 ── */
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .step-num {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    /* ── 빈 상태 ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 16px;
+      color: #bbb;
+    }
+
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>☕ 메가 커피 메뉴</h1>
+    <div class="search-wrapper">
+      <input type="text" id="search-input" placeholder="메뉴 이름을 검색하세요" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button id="clear-btn" aria-label="검색어 지우기">✕</button>
+      <div id="autocomplete-list"></div>
+    </div>
+  </header>
+
+  <div class="category-bar" id="category-bar"></div>
+
+  <main>
+    <div class="result-count" id="result-count"></div>
+    <div id="results">
+      <div class="empty-state"><div class="emoji">☕</div><p>메뉴 데이터를 불러오는 중...</p></div>
+    </div>
+  </main>
+
+  <script>
+    let allMenus = [];
+    let activeCategory = '전체';
+
+    // ── 데이터 로드 ──
+    async function loadData() {
+      try {
+        const res = await fetch('mega_data.json');
+        allMenus = await res.json();
+        initCategories();
+        renderResults(allMenus);
+      } catch (e) {
+        document.getElementById('results').innerHTML =
+          '<div class="empty-state"><div class="emoji">⚠️</div><p>데이터를 불러오지 못했습니다.</p></div>';
+      }
+    }
+
+    // ── 카테고리 바 초기화 ──
+    function initCategories() {
+      const categories = ['전체', ...new Set(allMenus.map(m => m['구분']))];
+      const bar = document.getElementById('category-bar');
+      bar.innerHTML = categories.map(c => `
+        <button class="cat-chip${c === '전체' ? ' active' : ''}" data-cat="${c}">${c}</button>
+      `).join('');
+
+      bar.addEventListener('click', e => {
+        const chip = e.target.closest('.cat-chip');
+        if (!chip) return;
+        document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+        chip.classList.add('active');
+        activeCategory = chip.dataset.cat;
+        applyFilters();
+      });
+    }
+
+    // ── 필터 적용 ──
+    function applyFilters() {
+      const query = document.getElementById('search-input').value.trim();
+      let results = allMenus;
+
+      if (activeCategory !== '전체') {
+        results = results.filter(m => m['구분'] === activeCategory);
+      }
+      if (query) {
+        const q = query.toLowerCase();
+        results = results.filter(m => m['제품명'].toLowerCase().includes(q));
+      }
+      renderResults(results);
+      renderAutocomplete(query);
+    }
+
+    // ── 색상 클래스 ──
+    function colorClass(name) {
+      if (name.startsWith('HOT')) return 'hot';
+      if (name.startsWith('ICE')) return 'ice';
+      return 'other';
+    }
+
+    function stepColor(cls) {
+      if (cls === 'hot') return '#c62828';
+      if (cls === 'ice') return '#1565c0';
+      return '#2e7d32';
+    }
+
+    // ── 결과 렌더링 ──
+    function renderResults(menus) {
+      const container = document.getElementById('results');
+      const countEl = document.getElementById('result-count');
+
+      if (menus.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="emoji">🔍</div><p>검색 결과가 없습니다.</p></div>';
+        countEl.textContent = '';
+        return;
+      }
+
+      countEl.textContent = `${menus.length}개 메뉴`;
+
+      container.innerHTML = menus.map(menu => {
+        const name = menu['제품명'];
+        const cls = colorClass(name);
+        const color = stepColor(cls);
+        const steps = menu['제조순서']
+          .split(' - ')
+          .map(s => s.trim())
+          .filter(s => s.length > 0);
+
+        const stepsHTML = steps.map((step, i) => `
+          <li class="step-item">
+            <span class="step-num" style="background:${color}">${i + 1}</span>
+            <span class="step-text">${step}</span>
+          </li>
+        `).join('');
+
+        return `
+          <div class="menu-card">
+            <div class="menu-name ${cls}">${name}</div>
+            <div class="category-label">${menu['구분']}</div>
+            <div class="divider"></div>
+            <ul class="steps-list">${stepsHTML}</ul>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── 자동완성 ──
+    function renderAutocomplete(query) {
+      const list = document.getElementById('autocomplete-list');
+      if (!query) { list.style.display = 'none'; return; }
+
+      let source = allMenus;
+      if (activeCategory !== '전체') source = source.filter(m => m['구분'] === activeCategory);
+
+      const q = query.toLowerCase();
+      const matches = source.filter(m => m['제품명'].toLowerCase().includes(q)).slice(0, 8);
+
+      if (matches.length === 0) { list.style.display = 'none'; return; }
+
+      list.innerHTML = matches.map(m =>
+        `<div class="ac-item" data-name="${m['제품명']}">${m['제품명']}</div>`
+      ).join('');
+      list.style.display = 'block';
+    }
+
+    // ── 이벤트 ──
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-btn');
+    const acList = document.getElementById('autocomplete-list');
+
+    searchInput.addEventListener('input', () => {
+      const v = searchInput.value;
+      clearBtn.style.display = v ? 'flex' : 'none';
+      applyFilters();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearBtn.style.display = 'none';
+      acList.style.display = 'none';
+      applyFilters();
+      searchInput.focus();
+    });
+
+    acList.addEventListener('click', e => {
+      const item = e.target.closest('.ac-item');
+      if (!item) return;
+      searchInput.value = item.dataset.name;
+      clearBtn.style.display = 'flex';
+      acList.style.display = 'none';
+      applyFilters();
+    });
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search-wrapper')) acList.style.display = 'none';
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
