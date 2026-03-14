@@ -139,7 +139,8 @@
 
     /* ── 토큰 모달 ── */
     #token-modal {
-      display: none; position: fixed; inset: 0;
+      display: none; position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
       background: rgba(0,0,0,0.5); z-index: 300;
       align-items: flex-end; justify-content: center;
     }
@@ -185,7 +186,8 @@
 
     /* ── 로딩 ── */
     #loading {
-      display: none; position: fixed; inset: 0;
+      display: none; position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
       background: rgba(0,0,0,0.4); z-index: 500;
       align-items: center; justify-content: center;
     }
@@ -259,6 +261,7 @@
   <div class="header">
     <div class="header-row">
       <h1>✏️ 메뉴 수정</h1>
+      <button id="reset-token-btn" style="background:rgba(255,255,255,0.15);border:none;color:white;font-size:12px;font-family:'Noto Sans KR',sans-serif;padding:4px 10px;border-radius:20px;cursor:pointer;">토큰 초기화</button>
     </div>
     <div class="search-wrap">
       <input type="text" id="search-input" placeholder="수정할 메뉴를 검색하세요" autocomplete="off" spellcheck="false">
@@ -595,6 +598,12 @@
     try { localStorage.setItem('gh_token', tok); } catch(e) {}
     doSave(tok);
     this.disabled = false;
+  });
+
+  // ── 토큰 초기화 버튼 ──
+  document.getElementById('reset-token-btn').addEventListener('click', function() {
+    try { localStorage.removeItem('gh_token'); } catch(e) {}
+    showToast('토큰이 초기화됐습니다.', '');
   });
 
   // ── 시작 ──
