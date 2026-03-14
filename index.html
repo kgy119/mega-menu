@@ -259,7 +259,7 @@
     // ── 데이터 로드 ──
     async function loadData() {
       try {
-        const res = await fetch('mega_data.json');
+        const res = await fetch('mega_data.json?_=' + Date.now());
         allMenus = await res.json();
         initCategories();
         renderResults(allMenus);
