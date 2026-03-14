@@ -81,8 +81,21 @@
     }
     .text-input:focus { border-color: #37474f; }
 
-    .token-status { margin-top: 10px; font-size: 13px; text-align: center; min-height: 18px; }
-    .token-status.error { color: #c62828; }
+    .token-status {
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+      min-height: 18px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: none;
+    }
+    .token-status.error {
+      display: block;
+      background: #ffebee;
+      color: #c62828;
+      font-weight: 700;
+    }
 
     /* ── 검색 화면 ── */
     #search-view { background: #f0f0f0; }
@@ -523,15 +536,18 @@
   }
 
   async function fetchFile(tok) {
+    const headers = tok ? { Authorization: `Bearer ${tok}` } : {};
     const res = await fetch(
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
-      { headers: { Authorization: `token ${tok}` } }
+      { headers }
     );
-    if (res.status === 401) throw new Error('토큰이 올바르지 않습니다.');
-    if (!res.ok)            throw new Error('데이터 로드에 실패했습니다.');
+    if (res.status === 401) throw new Error('토큰이 유효하지 않습니다. (401)');
+    if (res.status === 403) throw new Error('접근 권한이 없습니다. 토큰의 Contents 권한을 확인해주세요. (403)');
+    if (res.status === 404) throw new Error('저장소 또는 파일을 찾을 수 없습니다. (404)');
+    if (!res.ok)            throw new Error(`오류가 발생했습니다. (${res.status})`);
     const data  = await res.json();
     fileSha     = data.sha;
-    allMenus    = JSON.parse(decodeBase64(data.content));
+    allMenus    = JSON.parse(decodeBase64(data.content.replace(/\s/g, '')));
   }
 
   async function saveFile(tok, menus, sha, commitMsg) {
@@ -539,7 +555,7 @@
       `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
       {
         method: 'PUT',
-        headers: { Authorization: `token ${tok}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: commitMsg,
           content: encodeBase64(JSON.stringify(menus, null, 2)),
@@ -572,13 +588,13 @@
       showLoading('토큰 확인 중...');
       await fetchFile(input);
       token = input;
-      localStorage.setItem('gh_token', token);
+      try { localStorage.setItem('gh_token', token); } catch { /* 저장 실패 무시 */ }
       hideLoading();
       renderSearch('');
       showView('search-view');
     } catch (e) {
       hideLoading();
-      statusEl.textContent = e.message;
+      statusEl.textContent = '⚠ ' + e.message;
       statusEl.className   = 'token-status error';
     } finally {
       btn.disabled    = false;
