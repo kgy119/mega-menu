@@ -14,363 +14,210 @@
       font-family: 'Noto Sans KR', sans-serif;
       background: #f0f0f0;
       color: #222;
-      min-height: 100vh;
     }
 
-    /* ── 공통 ── */
-    .btn-primary {
-      display: block;
-      width: 100%;
-      padding: 13px;
+    /* ── 화면 전환 ── */
+    .view { display: none; min-height: 100vh; }
+    .view.active { display: block; }
+
+    /* ── 공통 헤더 ── */
+    .header {
       background: #37474f;
       color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer;
-    }
-    .btn-primary:disabled { background: #b0bec5; cursor: not-allowed; }
-
-    /* ── 토큰 화면 ── */
-    #token-view {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 24px 20px;
-    }
-
-    .token-card {
-      background: white;
-      border-radius: 16px;
-      padding: 28px 20px;
-      max-width: 440px;
-      width: 100%;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .token-card h2 { font-size: 18px; font-weight: 900; margin-bottom: 8px; color: #37474f; }
-
-    .token-card > p { font-size: 13px; color: #777; margin-bottom: 16px; line-height: 1.6; }
-
-    .token-steps {
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 14px 14px 14px 18px;
-      margin-bottom: 20px;
-    }
-
-    .token-steps strong { display: block; margin-bottom: 6px; font-size: 12px; color: #555; }
-
-    .token-steps ol { padding-left: 16px; font-size: 12px; line-height: 2; color: #555; }
-
-    .input-label { display: block; font-size: 12px; font-weight: 700; color: #666; margin-bottom: 6px; }
-
-    .text-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      outline: none;
-      margin-bottom: 16px;
-    }
-    .text-input:focus { border-color: #37474f; }
-
-    .token-status {
-      margin-top: 12px;
-      font-size: 13px;
-      text-align: center;
-      min-height: 18px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: none;
-    }
-    .token-status.error {
-      display: block;
-      background: #ffebee;
-      color: #c62828;
-      font-weight: 700;
-    }
-
-    /* ── 검색 화면 ── */
-    #search-view { background: #f0f0f0; }
-
-    .s-header {
-      background: #37474f;
-      color: white;
-      padding: 14px 16px 12px;
+      padding: 14px 16px;
       position: sticky;
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-
-    .s-header-top {
+    .header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
+    .header-row:last-child { margin-bottom: 0; }
+    .header h1 { font-size: 17px; font-weight: 900; }
 
-    .s-header-top h1 { font-size: 17px; font-weight: 900; }
-
-    .token-change-btn {
-      background: rgba(255,255,255,0.15);
-      border: none;
-      color: white;
-      font-size: 12px;
-      font-family: 'Noto Sans KR', sans-serif;
-      padding: 4px 10px;
-      border-radius: 20px;
-      cursor: pointer;
+    .back-btn {
+      background: none; border: none;
+      color: white; font-size: 24px;
+      cursor: pointer; padding: 0; line-height: 1;
+      margin-right: 10px; flex-shrink: 0;
     }
 
+    /* ── 검색 바 ── */
     .search-wrap { position: relative; }
-
     #search-input {
       width: 100%;
       padding: 11px 42px 11px 14px;
-      border: none;
-      border-radius: 8px;
+      border: none; border-radius: 8px;
       font-size: 16px;
       font-family: 'Noto Sans KR', sans-serif;
       outline: none;
     }
-
     #s-clear {
-      position: absolute;
-      right: 0; top: 0;
+      position: absolute; right: 0; top: 0;
       height: 100%; width: 42px;
       background: none; border: none;
       cursor: pointer; color: #bbb; font-size: 16px;
-      display: none;
-      align-items: center; justify-content: center;
+      display: none; align-items: center; justify-content: center;
     }
 
+    /* ── 메뉴 목록 ── */
     .result-count { font-size: 12px; color: #999; padding: 10px 16px 4px; }
-
     .menu-list { padding: 0 14px 32px; }
-
     .menu-row {
-      background: white;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      background: white; border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-    .menu-row:active { background: #f5f5f5; }
-
+    .menu-row:active { opacity: 0.7; }
     .menu-row-name { font-size: 15px; font-weight: 700; }
     .menu-row-name.hot   { color: #c62828; }
     .menu-row-name.ice   { color: #1565c0; }
     .menu-row-name.other { color: #2e7d32; }
     .menu-row-cat { font-size: 11px; color: #999; margin-top: 2px; }
-    .menu-row-arrow { color: #ccc; font-size: 22px; }
+    .menu-row-arrow { color: #ccc; font-size: 22px; flex-shrink: 0; }
 
     /* ── 편집 화면 ── */
-    #edit-view { background: #f0f0f0; }
-
-    .e-header {
-      background: #37474f;
-      color: white;
-      padding: 14px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .back-btn {
-      background: none; border: none;
-      color: white; font-size: 24px;
-      cursor: pointer; line-height: 1; padding: 0; flex-shrink: 0;
-    }
-
-    .e-header h1 { font-size: 16px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .edit-body { padding: 14px; max-width: 720px; margin: 0 auto; }
-
     .edit-card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 10px;
+      background: white; border-radius: 12px;
+      padding: 16px; margin-bottom: 10px;
       box-shadow: 0 1px 5px rgba(0,0,0,0.08);
     }
-
     .field-label { font-size: 12px; font-weight: 700; color: #999; margin-bottom: 8px; }
-
     .field-input, .field-select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 15px;
-      font-family: 'Noto Sans KR', sans-serif;
-      outline: none;
-      background: white;
+      width: 100%; padding: 10px 12px;
+      border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+      outline: none; background: white;
     }
     .field-input:focus, .field-select:focus { border-color: #37474f; }
 
     /* ── 제조순서 ── */
-    .steps-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
     #steps-list { display: flex; flex-direction: column; gap: 8px; }
-
-    .step-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .step-row { display: flex; align-items: center; gap: 8px; }
     .step-badge {
-      min-width: 26px; height: 26px;
-      border-radius: 50%;
-      background: #37474f;
-      color: white;
+      min-width: 26px; height: 26px; border-radius: 50%;
+      background: #37474f; color: white;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
-      flex-shrink: 0;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
     }
-
     .step-input {
-      flex: 1;
-      padding: 9px 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      outline: none;
+      flex: 1; padding: 9px 12px;
+      border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 14px; font-family: 'Noto Sans KR', sans-serif; outline: none;
     }
     .step-input:focus { border-color: #37474f; }
-
     .step-del {
-      background: none; border: none;
-      color: #ef9a9a; font-size: 20px;
-      cursor: pointer; padding: 4px; flex-shrink: 0; line-height: 1;
+      background: none; border: none; color: #ef9a9a;
+      font-size: 20px; cursor: pointer; padding: 4px; flex-shrink: 0; line-height: 1;
     }
-    .step-del:hover { color: #c62828; }
-
     .add-step-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      background: none;
-      border: 2px dashed #e0e0e0;
-      border-radius: 8px;
-      color: #999;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
-    }
-    .add-step-btn:hover { border-color: #37474f; color: #37474f; }
-
-    /* ── 액션 버튼 ── */
-    .action-row {
-      display: flex;
-      gap: 10px;
-      padding-bottom: 40px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; margin-top: 8px; width: 100%;
+      background: none; border: 2px dashed #e0e0e0; border-radius: 8px;
+      color: #999; font-size: 14px; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
     }
 
+    /* ── 저장/취소 버튼 ── */
+    .action-row { display: flex; gap: 10px; padding-bottom: 40px; }
     .btn-cancel {
-      flex: 1;
-      padding: 13px;
-      background: white;
-      color: #666;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer;
+      flex: 1; padding: 13px; background: white; color: #666;
+      border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
     }
-
     .btn-save {
-      flex: 2;
-      padding: 13px;
-      background: #37474f;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer;
+      flex: 2; padding: 13px; background: #37474f; color: white;
+      border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
     }
     .btn-save:disabled { background: #b0bec5; cursor: not-allowed; }
+
+    /* ── 토큰 모달 ── */
+    #token-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 300;
+      align-items: flex-end; justify-content: center;
+    }
+    #token-modal.open { display: flex; }
+    .token-sheet {
+      background: white; width: 100%; max-width: 560px;
+      border-radius: 20px 20px 0 0; padding: 24px 20px 36px;
+    }
+    .token-sheet h2 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+    .token-sheet p { font-size: 13px; color: #777; margin-bottom: 16px; line-height: 1.6; }
+    .token-steps {
+      background: #f5f5f5; border-radius: 8px;
+      padding: 12px 12px 12px 16px; margin-bottom: 16px;
+      font-size: 12px; line-height: 2; color: #555;
+    }
+    .token-steps ol { padding-left: 14px; }
+    .token-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    #token-input {
+      flex: 1; padding: 11px 14px;
+      border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 14px; font-family: 'Noto Sans KR', sans-serif; outline: none;
+    }
+    #token-input:focus { border-color: #37474f; }
+    #token-confirm-btn {
+      padding: 11px 18px; background: #37474f; color: white;
+      border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+      white-space: nowrap;
+    }
+    #token-confirm-btn:disabled { background: #b0bec5; }
+    #token-error {
+      font-size: 13px; color: #c62828; font-weight: 700;
+      background: #ffebee; padding: 10px 14px; border-radius: 8px;
+      display: none;
+    }
+    #token-error.show { display: block; }
+    .token-cancel-btn {
+      display: block; width: 100%; padding: 12px;
+      margin-top: 8px; background: none;
+      border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 14px; color: #999; font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+    }
+
+    /* ── 로딩 ── */
+    #loading {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    #loading.show { display: flex; }
+    .loading-box {
+      background: white; border-radius: 14px;
+      padding: 28px 36px; text-align: center; font-size: 15px; font-weight: 700;
+    }
+    .spinner {
+      display: block; width: 32px; height: 32px;
+      border: 3px solid #e0e0e0; border-top-color: #37474f;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── 토스트 ── */
+    #toast {
+      display: none; position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px; border-radius: 24px;
+      font-size: 14px; font-weight: 700; color: white;
+      z-index: 999; white-space: nowrap; pointer-events: none;
+    }
+    #toast.show { display: block; }
+    #toast.success { background: #2e7d32; }
+    #toast.error   { background: #c62828; }
 
     /* ── 빈 상태 ── */
     .empty-state { text-align: center; padding: 60px 16px; color: #bbb; }
     .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
     .empty-state p { font-size: 15px; }
-
-    /* ── 토스트 ── */
-    #toast {
-      position: fixed;
-      bottom: 28px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: #333;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 24px;
-      font-size: 14px; font-weight: 700;
-      transition: transform 0.3s ease;
-      z-index: 999;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast.success { background: #2e7d32; }
-    #toast.error   { background: #c62828; }
-
-    /* ── 로딩 ── */
-    #loading {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      align-items: center; justify-content: center;
-      z-index: 500;
-    }
-    #loading.show { display: flex; }
-
-    .loading-box {
-      background: white;
-      border-radius: 14px;
-      padding: 28px 36px;
-      text-align: center;
-      font-size: 15px; font-weight: 700;
-    }
-
-    .spinner {
-      display: block;
-      width: 32px; height: 32px;
-      border: 3px solid #e0e0e0;
-      border-top-color: #37474f;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 12px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -383,39 +230,35 @@
   </div>
 </div>
 
-<!-- ══════════════ 토큰 화면 ══════════════ -->
-<div id="token-view">
-  <div class="token-card">
-    <h2>🔑 GitHub 토큰 설정</h2>
-    <p>메뉴를 수정하려면 GitHub Personal Access Token이 필요합니다.<br>한 번 입력하면 이 기기에 저장됩니다.</p>
-
+<!-- ── 토큰 모달 (저장 시 표시) ── -->
+<div id="token-modal">
+  <div class="token-sheet">
+    <h2>🔑 GitHub 토큰 입력</h2>
+    <p>저장하려면 GitHub Personal Access Token이 필요합니다.<br>입력하면 이 기기에 저장되어 다음부터 자동으로 사용됩니다.</p>
     <div class="token-steps">
       <strong>토큰 발급 방법</strong>
       <ol>
-        <li>github.com → 프로필 사진 → Settings</li>
-        <li>왼쪽 하단 Developer settings 클릭</li>
-        <li>Personal access tokens → Fine-grained tokens</li>
-        <li>Generate new token 클릭</li>
-        <li>Repository access: <strong>mega-menu</strong> 선택</li>
-        <li>Permissions → Contents: <strong>Read and Write</strong></li>
-        <li>생성된 토큰 복사 후 아래에 입력</li>
+        <li>github.com → 프로필 → Settings</li>
+        <li>Developer settings → Fine-grained tokens</li>
+        <li>Generate new token → Repository: <b>mega-menu</b></li>
+        <li>Permissions → Contents: <b>Read and Write</b></li>
+        <li>생성된 토큰 복사 후 아래에 붙여넣기</li>
       </ol>
     </div>
-
-    <label class="input-label" for="token-input">GitHub Token</label>
-    <input type="password" id="token-input" class="text-input" placeholder="github_pat_..." autocomplete="off">
-
-    <button class="btn-primary" id="token-save-btn">확인 및 저장</button>
-    <div class="token-status" id="token-status"></div>
+    <div class="token-input-row">
+      <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off">
+      <button id="token-confirm-btn">저장 진행</button>
+    </div>
+    <div id="token-error"></div>
+    <button class="token-cancel-btn" id="token-cancel-btn">취소</button>
   </div>
 </div>
 
-<!-- ══════════════ 검색 화면 ══════════════ -->
-<div id="search-view" hidden>
-  <div class="s-header">
-    <div class="s-header-top">
+<!-- ══════════ 검색 화면 ══════════ -->
+<div id="search-view" class="view active">
+  <div class="header">
+    <div class="header-row">
       <h1>✏️ 메뉴 수정</h1>
-      <button class="token-change-btn" id="change-token-btn">토큰 변경</button>
     </div>
     <div class="search-wrap">
       <input type="text" id="search-input" placeholder="수정할 메뉴를 검색하세요" autocomplete="off" spellcheck="false">
@@ -424,25 +267,26 @@
   </div>
   <div class="result-count" id="result-count"></div>
   <div class="menu-list" id="menu-list">
-    <div class="empty-state"><div class="emoji">🔍</div><p>메뉴를 검색하세요.</p></div>
+    <div class="empty-state"><div class="emoji">⏳</div><p>메뉴 불러오는 중...</p></div>
   </div>
 </div>
 
-<!-- ══════════════ 편집 화면 ══════════════ -->
-<div id="edit-view" hidden>
-  <div class="e-header">
-    <button class="back-btn" id="back-btn">←</button>
-    <h1 id="edit-title">메뉴 수정</h1>
+<!-- ══════════ 편집 화면 ══════════ -->
+<div id="edit-view" class="view">
+  <div class="header">
+    <div class="header-row">
+      <div style="display:flex; align-items:center; flex:1; min-width:0;">
+        <button class="back-btn" id="back-btn">←</button>
+        <h1 id="edit-title" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></h1>
+      </div>
+    </div>
   </div>
 
   <div class="edit-body">
-    <!-- 제품명 -->
     <div class="edit-card">
       <div class="field-label">제품명</div>
       <input type="text" class="field-input" id="edit-name">
     </div>
-
-    <!-- 구분 -->
     <div class="edit-card">
       <div class="field-label">구분 (카테고리)</div>
       <select class="field-select" id="edit-category">
@@ -451,7 +295,7 @@
         <option>차</option>
         <option>non커피라떼</option>
         <option>에이드</option>
-        <option>스무디&amp;프라페</option>
+        <option value="스무디&프라페">스무디&amp;프라페</option>
         <option>흑당</option>
         <option>주스</option>
         <option>콜드브루</option>
@@ -459,17 +303,11 @@
         <option>베이스</option>
       </select>
     </div>
-
-    <!-- 제조순서 -->
     <div class="edit-card">
-      <div class="steps-header">
-        <div class="field-label" style="margin-bottom:0">제조순서</div>
-      </div>
+      <div class="field-label">제조순서</div>
       <div id="steps-list"></div>
       <button class="add-step-btn" id="add-step-btn">＋ 단계 추가</button>
     </div>
-
-    <!-- 저장/취소 -->
     <div class="action-row">
       <button class="btn-cancel" id="cancel-btn">취소</button>
       <button class="btn-save" id="save-btn">💾 저장</button>
@@ -478,292 +316,289 @@
 </div>
 
 <script>
-  const REPO_OWNER = 'kgy119';
-  const REPO_NAME  = 'mega-menu';
-  const FILE_PATH  = 'mega_data.json';
+  var REPO_OWNER = 'kgy119';
+  var REPO_NAME  = 'mega-menu';
+  var FILE_PATH  = 'mega_data.json';
 
-  let token    = '';
-  let allMenus = [];
-  let fileSha  = '';
-  let editIndex = -1;
+  var allMenus  = [];
+  var fileSha   = '';
+  var editIndex = -1;
 
-  // ── 유틸 ──────────────────────────────
-  function showToast(msg, type = '') {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.className = 'show ' + type;
-    setTimeout(() => { el.className = ''; }, 2800);
-  }
-
-  function showLoading(text = '처리 중...') {
-    document.getElementById('loading-text').textContent = text;
-    document.getElementById('loading').classList.add('show');
-  }
-  function hideLoading() {
-    document.getElementById('loading').classList.remove('show');
-  }
-
+  // ── 유틸 ──
   function showView(id) {
-    ['token-view', 'search-view', 'edit-view'].forEach(v => {
-      document.getElementById(v).hidden = (v !== id);
-    });
+    document.getElementById('search-view').className = 'view' + (id === 'search-view' ? ' active' : '');
+    document.getElementById('edit-view').className   = 'view' + (id === 'edit-view'   ? ' active' : '');
     window.scrollTo(0, 0);
   }
 
+  function showToast(msg, type) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'show ' + (type || '');
+    setTimeout(function() { el.className = ''; }, 3000);
+  }
+
+  function showLoading(text) {
+    document.getElementById('loading-text').textContent = text || '처리 중...';
+    document.getElementById('loading').className = 'show';
+  }
+  function hideLoading() {
+    document.getElementById('loading').className = '';
+  }
+
   function colorClass(name) {
-    if (name.startsWith('HOT')) return 'hot';
-    if (name.startsWith('ICE')) return 'ice';
+    if (name.indexOf('HOT') === 0) return 'hot';
+    if (name.indexOf('ICE') === 0) return 'ice';
     return 'other';
   }
 
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function esc(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ── GitHub API ─────────────────────────
-  function decodeBase64(b64) {
-    const binary = atob(b64.replace(/\n/g, ''));
-    const bytes  = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  // ── Base64 (UTF-8 대응) ──
+  function decodeB64(b64) {
+    var binary = atob(b64.replace(/\s/g, ''));
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     return new TextDecoder().decode(bytes);
   }
 
-  function encodeBase64(str) {
-    const bytes = new TextEncoder().encode(str);
-    let bin = '';
-    for (const b of bytes) bin += String.fromCharCode(b);
+  function encodeB64(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
     return btoa(bin);
   }
 
-  async function fetchFile(tok) {
-    const headers = tok ? { Authorization: `Bearer ${tok}` } : {};
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
-      { headers }
-    );
-    if (res.status === 401) throw new Error('토큰이 유효하지 않습니다. (401)');
-    if (res.status === 403) throw new Error('접근 권한이 없습니다. 토큰의 Contents 권한을 확인해주세요. (403)');
-    if (res.status === 404) throw new Error('저장소 또는 파일을 찾을 수 없습니다. (404)');
-    if (!res.ok)            throw new Error(`오류가 발생했습니다. (${res.status})`);
-    const data  = await res.json();
-    fileSha     = data.sha;
-    allMenus    = JSON.parse(decodeBase64(data.content.replace(/\s/g, '')));
+  // ── 데이터 로드 (인증 불필요, 공개 저장소) ──
+  function loadData() {
+    showLoading('메뉴 불러오는 중...');
+    fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH)
+      .then(function(res) {
+        if (!res.ok) throw new Error('데이터 로드 실패 (' + res.status + ')');
+        return res.json();
+      })
+      .then(function(data) {
+        fileSha   = data.sha;
+        allMenus  = JSON.parse(decodeB64(data.content));
+        hideLoading();
+        renderSearch('');
+      })
+      .catch(function(e) {
+        hideLoading();
+        document.getElementById('menu-list').innerHTML =
+          '<div class="empty-state"><div class="emoji">⚠️</div><p>' + esc(e.message) + '</p></div>';
+      });
   }
 
-  async function saveFile(tok, menus, sha, commitMsg) {
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: commitMsg,
-          content: encodeBase64(JSON.stringify(menus, null, 2)),
-          sha,
-        }),
-      }
-    );
-    if (!res.ok) throw new Error('저장에 실패했습니다. 다시 시도해 주세요.');
-    const result = await res.json();
-    fileSha = result.content.sha;
-  }
-
-  // ── 토큰 화면 ──────────────────────────
-  document.getElementById('token-save-btn').addEventListener('click', async () => {
-    const input    = document.getElementById('token-input').value.trim();
-    const statusEl = document.getElementById('token-status');
-    const btn      = document.getElementById('token-save-btn');
-
-    if (!input) {
-      statusEl.textContent = '토큰을 입력해주세요.';
-      statusEl.className   = 'token-status error';
-      return;
-    }
-
-    btn.disabled    = true;
-    btn.textContent = '확인 중...';
-    statusEl.textContent = '';
-
-    try {
-      showLoading('토큰 확인 중...');
-      await fetchFile(input);
-      token = input;
-      try { localStorage.setItem('gh_token', token); } catch { /* 저장 실패 무시 */ }
-      hideLoading();
-      renderSearch('');
-      showView('search-view');
-    } catch (e) {
-      hideLoading();
-      statusEl.textContent = '⚠ ' + e.message;
-      statusEl.className   = 'token-status error';
-    } finally {
-      btn.disabled    = false;
-      btn.textContent = '확인 및 저장';
-    }
-  });
-
-  // ── 검색 화면 ──────────────────────────
-  document.getElementById('change-token-btn').addEventListener('click', () => {
-    localStorage.removeItem('gh_token');
-    token = '';
-    document.getElementById('token-input').value = '';
-    document.getElementById('token-status').textContent = '';
-    showView('token-view');
-  });
-
+  // ── 검색 렌더링 ──
   function renderSearch(query) {
-    const listEl   = document.getElementById('menu-list');
-    const countEl  = document.getElementById('result-count');
-    const q        = query.toLowerCase().trim();
-    const filtered = q ? allMenus.filter(m => m['제품명'].toLowerCase().includes(q)) : allMenus;
+    var listEl  = document.getElementById('menu-list');
+    var countEl = document.getElementById('result-count');
+    var q = query.toLowerCase().trim();
+    var filtered = q
+      ? allMenus.filter(function(m) { return m['제품명'].toLowerCase().indexOf(q) !== -1; })
+      : allMenus;
 
-    countEl.textContent = filtered.length > 0 ? `${filtered.length}개 메뉴` : '';
+    countEl.textContent = filtered.length > 0 ? filtered.length + '개 메뉴' : '';
 
     if (filtered.length === 0) {
       listEl.innerHTML = '<div class="empty-state"><div class="emoji">🔍</div><p>검색 결과가 없습니다.</p></div>';
       return;
     }
 
-    listEl.innerHTML = filtered.map(menu => {
-      const idx = allMenus.indexOf(menu);
-      const cls = colorClass(menu['제품명']);
-      return `
-        <div class="menu-row" data-idx="${idx}">
-          <div>
-            <div class="menu-row-name ${cls}">${escHtml(menu['제품명'])}</div>
-            <div class="menu-row-cat">${escHtml(menu['구분'])}</div>
-          </div>
-          <span class="menu-row-arrow">›</span>
-        </div>`;
-    }).join('');
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var m   = filtered[i];
+      var idx = allMenus.indexOf(m);
+      var cls = colorClass(m['제품명']);
+      html += '<div class="menu-row" data-idx="' + idx + '">'
+            + '<div><div class="menu-row-name ' + cls + '">' + esc(m['제품명']) + '</div>'
+            + '<div class="menu-row-cat">' + esc(m['구분']) + '</div></div>'
+            + '<span class="menu-row-arrow">\u203a</span></div>';
+    }
+    listEl.innerHTML = html;
   }
 
-  const searchInput = document.getElementById('search-input');
-  const sClear      = document.getElementById('s-clear');
+  var searchInput = document.getElementById('search-input');
+  var sClear      = document.getElementById('s-clear');
 
-  searchInput.addEventListener('input', () => {
+  searchInput.addEventListener('input', function() {
     sClear.style.display = searchInput.value ? 'flex' : 'none';
     renderSearch(searchInput.value);
   });
-
-  sClear.addEventListener('click', () => {
+  sClear.addEventListener('click', function() {
     searchInput.value = '';
     sClear.style.display = 'none';
     renderSearch('');
     searchInput.focus();
   });
-
-  document.getElementById('menu-list').addEventListener('click', e => {
-    const row = e.target.closest('.menu-row');
-    if (!row) return;
-    openEdit(parseInt(row.dataset.idx));
+  document.getElementById('menu-list').addEventListener('click', function(e) {
+    var row = e.target;
+    while (row && !row.dataset.idx) row = row.parentElement;
+    if (row && row.dataset.idx !== undefined) openEdit(parseInt(row.dataset.idx, 10));
   });
 
-  // ── 편집 화면 ──────────────────────────
+  // ── 편집 화면 ──
   function renderSteps(steps) {
-    document.getElementById('steps-list').innerHTML = steps.map((step, i) => `
-      <div class="step-row" data-i="${i}">
-        <span class="step-badge">${i + 1}</span>
-        <input type="text" class="step-input" value="${escHtml(step)}" placeholder="단계 내용 입력">
-        <button class="step-del" data-i="${i}" title="삭제">✕</button>
-      </div>`).join('');
+    var html = '';
+    for (var i = 0; i < steps.length; i++) {
+      html += '<div class="step-row">'
+            + '<span class="step-badge">' + (i + 1) + '</span>'
+            + '<input type="text" class="step-input" value="' + esc(steps[i]) + '" placeholder="단계 내용">'
+            + '<button class="step-del" data-i="' + i + '">✕</button>'
+            + '</div>';
+    }
+    document.getElementById('steps-list').innerHTML = html;
   }
 
   function getSteps() {
-    return [...document.querySelectorAll('.step-input')]
-      .map(el => el.value.trim())
-      .filter(s => s.length > 0);
+    var inputs = document.querySelectorAll('.step-input');
+    var steps = [];
+    for (var i = 0; i < inputs.length; i++) {
+      var v = inputs[i].value.trim();
+      if (v) steps.push(v);
+    }
+    return steps;
   }
 
   function openEdit(idx) {
     editIndex = idx;
-    const menu  = allMenus[idx];
-    const steps = menu['제조순서'].split(' - ').map(s => s.trim()).filter(Boolean);
-
-    document.getElementById('edit-title').textContent   = menu['제품명'];
-    document.getElementById('edit-name').value          = menu['제품명'];
-    document.getElementById('edit-category').value      = menu['구분'];
-    renderSteps(steps);
+    var menu  = allMenus[idx];
+    var steps = menu['제조순서'].split(' - ');
+    var clean = [];
+    for (var i = 0; i < steps.length; i++) {
+      var s = steps[i].trim();
+      if (s) clean.push(s);
+    }
+    document.getElementById('edit-title').textContent = menu['제품명'];
+    document.getElementById('edit-name').value        = menu['제품명'];
+    document.getElementById('edit-category').value    = menu['구분'];
+    renderSteps(clean);
     showView('edit-view');
   }
 
-  // 단계 삭제
-  document.getElementById('steps-list').addEventListener('click', e => {
-    const btn = e.target.closest('.step-del');
-    if (!btn) return;
-    const steps = getSteps();
-    steps.splice(parseInt(btn.dataset.i), 1);
+  document.getElementById('steps-list').addEventListener('click', function(e) {
+    var btn = e.target;
+    if (btn.className !== 'step-del') return;
+    var steps = getSteps();
+    steps.splice(parseInt(btn.dataset.i, 10), 1);
     renderSteps(steps);
   });
 
-  // 단계 추가
-  document.getElementById('add-step-btn').addEventListener('click', () => {
-    const steps = getSteps();
+  document.getElementById('add-step-btn').addEventListener('click', function() {
+    var steps = getSteps();
     steps.push('');
     renderSteps(steps);
-    const inputs = document.querySelectorAll('.step-input');
-    inputs[inputs.length - 1]?.focus();
+    var inputs = document.querySelectorAll('.step-input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
   });
 
-  // 뒤로
-  document.getElementById('back-btn').addEventListener('click',   () => showView('search-view'));
-  document.getElementById('cancel-btn').addEventListener('click', () => showView('search-view'));
+  document.getElementById('back-btn').addEventListener('click',   function() { showView('search-view'); });
+  document.getElementById('cancel-btn').addEventListener('click', function() { showView('search-view'); });
 
-  // 저장
-  document.getElementById('save-btn').addEventListener('click', async () => {
-    const name     = document.getElementById('edit-name').value.trim();
-    const category = document.getElementById('edit-category').value;
-    const steps    = getSteps();
+  // ── 저장 ──
+  document.getElementById('save-btn').addEventListener('click', function() {
+    var name   = document.getElementById('edit-name').value.trim();
+    var steps  = getSteps();
+    if (!name)         { showToast('제품명을 입력해주세요.', 'error'); return; }
+    if (!steps.length) { showToast('제조순서를 입력해주세요.', 'error'); return; }
 
-    if (!name)           { showToast('제품명을 입력해주세요.', 'error'); return; }
-    if (!steps.length)   { showToast('제조순서를 입력해주세요.', 'error'); return; }
+    var stored = '';
+    try { stored = localStorage.getItem('gh_token') || ''; } catch(e) {}
 
-    const btn = document.getElementById('save-btn');
-    btn.disabled = true;
+    if (stored) {
+      doSave(stored);
+    } else {
+      openTokenModal();
+    }
+  });
+
+  function doSave(tok) {
+    var name     = document.getElementById('edit-name').value.trim();
+    var category = document.getElementById('edit-category').value;
+    var steps    = getSteps();
+    var saveBtn  = document.getElementById('save-btn');
+    saveBtn.disabled = true;
     showLoading('저장 중...');
 
-    try {
-      // 최신 SHA 확보 (동시 편집 충돌 방지)
-      await fetchFile(token);
+    // 최신 SHA 확보 후 저장
+    fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH)
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        fileSha = data.sha;
+        allMenus[editIndex] = { '구분': category, '제품명': name, '제조순서': steps.join(' - ') };
+        var body = JSON.stringify({
+          message: '메뉴 업데이트: ' + name,
+          content: encodeB64(JSON.stringify(allMenus, null, 2)),
+          sha: fileSha
+        });
+        return fetch(
+          'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH,
+          { method: 'PUT', headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' }, body: body }
+        );
+      })
+      .then(function(res) {
+        if (res.status === 401) throw new Error('토큰이 유효하지 않습니다. 토큰을 삭제하고 다시 시도해주세요.');
+        if (res.status === 403) throw new Error('권한이 없습니다. 토큰의 Contents 권한을 확인해주세요.');
+        if (!res.ok) throw new Error('저장 실패 (' + res.status + ')');
+        return res.json();
+      })
+      .then(function(result) {
+        fileSha = result.content.sha;
+        hideLoading();
+        saveBtn.disabled = false;
+        showToast('✓ 저장 완료!', 'success');
+        renderSearch(searchInput.value);
+        showView('search-view');
+      })
+      .catch(function(e) {
+        hideLoading();
+        saveBtn.disabled = false;
+        // 토큰 관련 오류면 저장된 토큰 삭제
+        if (e.message.indexOf('401') !== -1 || e.message.indexOf('토큰이 유효') !== -1) {
+          try { localStorage.removeItem('gh_token'); } catch(err) {}
+        }
+        showToast(e.message, 'error');
+      });
+  }
 
-      allMenus[editIndex] = {
-        '구분':   category,
-        '제품명': name,
-        '제조순서': steps.join(' - '),
-      };
+  // ── 토큰 모달 ──
+  function openTokenModal() {
+    document.getElementById('token-input').value = '';
+    document.getElementById('token-error').className = '';
+    document.getElementById('token-modal').className = 'open';
+  }
+  function closeTokenModal() {
+    document.getElementById('token-modal').className = '';
+  }
 
-      await saveFile(token, allMenus, fileSha, `메뉴 업데이트: ${name}`);
-
-      hideLoading();
-      showToast('✓ 저장 완료!', 'success');
-      renderSearch(searchInput.value);
-      showView('search-view');
-    } catch (e) {
-      hideLoading();
-      showToast(e.message, 'error');
-    } finally {
-      btn.disabled = false;
-    }
+  document.getElementById('token-cancel-btn').addEventListener('click', closeTokenModal);
+  document.getElementById('token-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeTokenModal();
   });
 
-  // ── 초기화 ─────────────────────────────
-  (async () => {
-    const saved = localStorage.getItem('gh_token');
-    if (!saved) { showView('token-view'); return; }
-
-    try {
-      showLoading('데이터 로드 중...');
-      await fetchFile(saved);
-      token = saved;
-      hideLoading();
-      renderSearch('');
-      showView('search-view');
-    } catch {
-      hideLoading();
-      localStorage.removeItem('gh_token');
-      showView('token-view');
+  document.getElementById('token-confirm-btn').addEventListener('click', function() {
+    var tok = document.getElementById('token-input').value.trim();
+    var errEl = document.getElementById('token-error');
+    if (!tok) {
+      errEl.textContent = '토큰을 입력해주세요.';
+      errEl.className = 'show';
+      return;
     }
-  })();
+    errEl.className = '';
+    this.disabled = true;
+    closeTokenModal();
+    try { localStorage.setItem('gh_token', tok); } catch(e) {}
+    doSave(tok);
+    this.disabled = false;
+  });
+
+  // ── 시작 ──
+  loadData();
 </script>
 </body>
 </html>
