@@ -528,30 +528,35 @@
     saveBtn.disabled = true;
     showLoading('저장 중...');
 
-    // 최신 SHA 확보 후 저장
-    fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH)
-      .then(function(res) { return res.json(); })
+    // 토큰으로 인증된 요청으로 최신 SHA + 데이터 확보 (CDN 캐시 우회)
+    fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH,
+      { headers: { 'Authorization': 'Bearer ' + tok } })
+      .then(function(res) {
+        if (!res.ok) throw new Error('최신 데이터 로드 실패 (' + res.status + ')');
+        return res.json();
+      })
       .then(function(data) {
-        fileSha = data.sha;
-        allMenus[editIndex] = { '구분': category, '제품명': name, '제조순서': steps.join(' - ') };
+        var latestSha   = data.sha;
+        var latestMenus = JSON.parse(decodeB64(data.content));
+        latestMenus[editIndex] = { '구분': category, '제품명': name, '제조순서': steps.join(' - ') };
         var body = JSON.stringify({
           message: '메뉴 업데이트: ' + name,
-          content: encodeB64(JSON.stringify(allMenus, null, 2)),
-          sha: fileSha
+          content: encodeB64(JSON.stringify(latestMenus, null, 2)),
+          sha: latestSha
         });
         return fetch(
           'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH,
           { method: 'PUT', headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' }, body: body }
-        );
+        ).then(function(res) {
+          if (res.status === 401) throw new Error('토큰이 유효하지 않습니다. 토큰을 초기화하고 다시 시도해주세요.');
+          if (res.status === 403) throw new Error('권한이 없습니다. 토큰의 Contents 권한을 확인해주세요.');
+          if (!res.ok) throw new Error('저장 실패 (' + res.status + ')');
+          // 로컬 데이터를 저장한 버전으로 갱신
+          allMenus = latestMenus;
+          return res.json();
+        });
       })
-      .then(function(res) {
-        if (res.status === 401) throw new Error('토큰이 유효하지 않습니다. 토큰을 삭제하고 다시 시도해주세요.');
-        if (res.status === 403) throw new Error('권한이 없습니다. 토큰의 Contents 권한을 확인해주세요.');
-        if (!res.ok) throw new Error('저장 실패 (' + res.status + ')');
-        return res.json();
-      })
-      .then(function(result) {
-        fileSha = result.content.sha;
+      .then(function() {
         hideLoading();
         saveBtn.disabled = false;
         showToast('✓ 저장 완료!', 'success');
